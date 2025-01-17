@@ -1,10 +1,14 @@
 import { useLocation } from "react-router-dom";
 import { useAwsAmplifyAuthContent } from "../context/AwsAuthAmplifyProvider";
 import { useState } from "react";
+import { useApiContext } from "../context/ApiContext";
+import { useUserSessionContext } from "../context/UserSessionContextProvider";
 
 const Otp = () => {
   const { confirmUserSignUp} =
     useAwsAmplifyAuthContent();
+  const {createUserWithCognitoId} = useApiContext() ;
+  const {cognitoUser} = useUserSessionContext();
   //const navigate = useNavigate();
   const location = useLocation();
   const { email, otpDeliveryDestination } = location.state;
@@ -15,6 +19,7 @@ const Otp = () => {
     event.preventDefault();
     try {
       await confirmUserSignUp(email, otp);
+      await createUserWithCognitoId({cogId : cognitoUser?.cogId ,email :  email})
     } catch (error) {
       console.log("An error occurred", error);
     }

@@ -21,6 +21,7 @@ import {
 
 import { IAwsApiResponse } from "../types/common";
 import { getErrorMessage } from "../utils/utils";
+import { useUserSessionContext } from "./UserSessionContextProvider";
 
 interface IAwsAmplifyAuthContextType {
   signUpUser: (
@@ -61,6 +62,7 @@ export const useAwsAmplifyAuthContent = () => {
 };
 
 const AmplifyAuthContextProvider: React.FC<IAuthChildren> = ({ children }) => {
+  const { setCognitoUser } = useUserSessionContext();
   // ============ Sign In - Start ==============
   const signInUser = useCallback(
     async (
@@ -72,7 +74,11 @@ const AmplifyAuthContextProvider: React.FC<IAuthChildren> = ({ children }) => {
           username,
           password,
         });
-
+        console.log("The res is", res);
+        // setCognitoUser({
+        //   cogId: res?.userId,
+        //   email: email,
+        // });
         // const currentUser = await getCurrentUser();
         console.log("Sign In Response (DEBUG): ", res);
         return { success: true, errorMsg: "", response: res };
@@ -100,6 +106,10 @@ const AmplifyAuthContextProvider: React.FC<IAuthChildren> = ({ children }) => {
           password,
         });
         console.log("Sign Up Response (DEBUG): ", res);
+        setCognitoUser({
+          cogId: res.userId || "",
+          email: username,
+        });
         return { success: true, errorMsg: "", response: res };
       } catch (error) {
         console.log("Sign Up Error (DEBUG): ", error);

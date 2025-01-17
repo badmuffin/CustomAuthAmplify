@@ -13,12 +13,12 @@ export interface IUserSessionContextType {
   selectedChat: string[] | [];
   setSelectedChat: React.Dispatch<React.SetStateAction<string[] | []>>;
 }
-export const userSessionContext = createContext<IUserSessionContextType | null>(
+export const UserSessionContext = createContext<IUserSessionContextType | null>(
   null
 );
 
-export const useAwsAmplifyAuthContent = () => {
-  const context = useContext(userSessionContext);
+export const useUserSessionContext = () => {
+  const context = useContext(UserSessionContext);
 
   if (!context) {
     throw new Error(
@@ -44,7 +44,7 @@ const UserSessionContextProvider: React.FC<IUserSessionChildren> = ({
   const [selectedChat, setSelectedChat] = useState<string[] | []>([]);
 
   return (
-    <userSessionContext.Provider
+    <UserSessionContext.Provider
       value={{
         showLoader,
         setShowLoader,
@@ -59,7 +59,7 @@ const UserSessionContextProvider: React.FC<IUserSessionChildren> = ({
       }}
     >
       {children}
-    </userSessionContext.Provider>
+    </UserSessionContext.Provider>
   );
 };
 export default UserSessionContextProvider;
