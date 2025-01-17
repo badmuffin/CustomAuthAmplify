@@ -3,7 +3,7 @@
 // username in the paramater is the email of the user
 // ==================================================
 
-import { createContext, useCallback } from "react";
+import { createContext, useCallback, useContext } from "react";
 
 import {
   signIn,
@@ -45,9 +45,20 @@ interface IAuthChildren {
   children: React.ReactNode;
 }
 
-const AmplifyAuthContext = createContext<IAwsAmplifyAuthContextType | null>(
-  null
-);
+export const AmplifyAuthContext =
+  createContext<IAwsAmplifyAuthContextType | null>(null);
+
+export const useAwsAmplifyAuthContent = () => {
+  const context = useContext(AmplifyAuthContext);
+
+  if (!context) {
+    throw new Error(
+      "useAwsAmplifyAuthContent must be used within a UserProvider"
+    );
+  }
+
+  return context;
+};
 
 const AmplifyAuthContextProvider: React.FC<IAuthChildren> = ({ children }) => {
   // ============ Sign In - Start ==============
@@ -193,4 +204,4 @@ const AmplifyAuthContextProvider: React.FC<IAuthChildren> = ({ children }) => {
   );
 };
 
-export { AmplifyAuthContext, AmplifyAuthContextProvider };
+export default AmplifyAuthContextProvider;

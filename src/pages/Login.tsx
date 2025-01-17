@@ -1,13 +1,29 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
+import {
+  AmplifyAuthContext,
+  useAwsAmplifyAuthContent,
+} from "../context/AwsAuthAmplifyProvider";
 
 const Login = () => {
+  const authContext = useContext(AmplifyAuthContext);
+  if (!authContext) {
+    throw new Error("AmplifyAuthContext is not initialized.");
+  }
+
+  const { signInUser } = useAwsAmplifyAuthContent();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    console.log("The event has occurred");
+    try {
+      const response = await signInUser(email, password);
+      console.log("The response id", response);
+    } catch (error) {
+      console.log("The error is", error);
+    }
   };
 
   return (
@@ -42,7 +58,9 @@ const Login = () => {
             onChange={(e) => setPassword(e.target.value)}
             type="password"
           />
-          <Link to = '/signup' className="text-blue-700 underline">Don't have account Sign Up</Link>
+          <Link to="/signup" className="text-blue-700 underline">
+            Don't have account Sign Up
+          </Link>
           <button
             className="bg-black text-white p-2 border-2 rounded-md"
             onClick={handleSubmit}
