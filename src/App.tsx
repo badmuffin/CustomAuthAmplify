@@ -3,15 +3,18 @@ import { AwsConfigAuth } from "./config/awsConfig";
 import AmplifyAuthContextProvider from "./context/AwsAuthAmplifyProvider";
 import Router from "./Router";
 import UserSessionContextProvider from "./context/UserSessionContextProvider";
+import ApiContextProvider from "./context/ApiContext";
 
 const App = () => {
   Amplify.configure(AwsConfigAuth);
 
   return (
     <UserSessionContextProvider>
-      <AmplifyAuthContextProvider>
-        <Router />
-      </AmplifyAuthContextProvider>
+      <ApiContextProvider>
+        <AmplifyAuthContextProvider>
+          <Router />
+        </AmplifyAuthContextProvider>
+      </ApiContextProvider>
     </UserSessionContextProvider>
   );
 };
