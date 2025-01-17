@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -10,13 +11,13 @@ const Login = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen w-screen gap-2 bg-cyan-200">
+    <div className="flex justify-center items-center h-screen w-screen gap-2 p-2 bg-cyan-200">
       <div className="w-1/2 h-1/2 flex flex-col items-center gap-2 justify-center shadow-2xl bg-white">
         <h1 className="text-center text-2xl font-serif">
           Welcome to the MagAI !!
         </h1>
 
-        <form className="flex flex-col gap-2 w-2/3 h-2/3 text-2xl font-serif text-slate-600">
+        <form className="flex flex-col gap-2 w-2/3 text-2xl font-serif text-slate-600">
           <label className="w-full" htmlFor="email">
             Email
           </label>
@@ -41,7 +42,7 @@ const Login = () => {
             onChange={(e) => setPassword(e.target.value)}
             type="password"
           />
-
+          <Link to = '/signup' className="text-blue-700 underline">Don't have account Sign Up</Link>
           <button
             className="bg-black text-white p-2 border-2 rounded-md"
             onClick={handleSubmit}
