@@ -1,14 +1,30 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAwsAmplifyAuthContent } from "../context/AwsAuthAmplifyProvider";
 
 const Signup = () => {
+  const { signUpUser } = useAwsAmplifyAuthContent();
+  const navigate = useNavigate() ;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [name,setName] = useState('')
+  const [name, setName] = useState("");
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    console.log("The event has occurred");
+    try {
+      const {response} = await signUpUser(email, password);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const otpDeliveryDestination = (response?.nextStep as any).codeDeliveryDetails.destination;
+      console.log("The otp delivery destination is", otpDeliveryDestination);
+      navigate("/otp", {
+        state: {
+          email: email,
+          otpDeliveryDestination,
+        },
+      });
+    } catch (error) {
+      console.log("The error is", error);
+    }
   };
 
   return (
